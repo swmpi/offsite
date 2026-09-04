@@ -1,0 +1,323 @@
+{
+  "_about": "Seed test set for RemoteClassifier. These 46 cases were written by hand to cover the failure modes that naive keyword matching hits. They are synthetic — modelled on real HN 'Who is hiring' phrasing but not copied from it. Replace and extend with real labelled postings from live threads; that is what makes the accuracy number mean something.",
+  "_schema": {
+    "id": "stable identifier",
+    "text": "the posting body as it would arrive (HTML entities and <p> tags included where realistic)",
+    "header": "the first line, which the classifier treats as semi-structured",
+    "expect": "remote | hybrid | onsite",
+    "note": "why this case is here"
+  },
+  "cases": [
+    {
+      "id": "hdr-01",
+      "header": "Cloudscale | Senior Backend Engineer | REMOTE | $150k-$190k",
+      "text": "Cloudscale | Senior Backend Engineer | REMOTE | $150k-$190k<p>We run a Go and Postgres stack on AWS. Small team, no on-call rotation yet.<p>Email jobs@cloudscale.example",
+      "expect": "remote",
+      "note": "clean pipe header, the easy case"
+    },
+    {
+      "id": "hdr-02",
+      "header": "Meridian Robotics | Controls Engineer | Boston, MA | ONSITE | Full-time",
+      "text": "Meridian Robotics | Controls Engineer | Boston, MA | ONSITE | Full-time<p>You will be working on physical hardware in our Seaport lab.",
+      "expect": "onsite",
+      "note": "explicit ONSITE field"
+    },
+    {
+      "id": "hdr-03",
+      "header": "Lantern Health | Full-Stack Engineer | Chicago | HYBRID",
+      "text": "Lantern Health | Full-Stack Engineer | Chicago | HYBRID<p>TypeScript, React, Python. We are in the Loop.",
+      "expect": "hybrid",
+      "note": "explicit HYBRID field"
+    },
+    {
+      "id": "hdr-04",
+      "header": "Bracket | Data Engineer | REMOTE (US) | $140k-$175k",
+      "text": "Bracket | Data Engineer | REMOTE (US) | $140k-$175k<p>Airflow, dbt, Snowflake. We are a fully distributed team of 22.",
+      "expect": "remote",
+      "note": "remote with a geographic restriction in parens — still remote"
+    },
+    {
+      "id": "hdr-05",
+      "header": "Verso | Frontend Engineer | REMOTE (EU timezones)",
+      "text": "Verso | Frontend Engineer | REMOTE (EU timezones)<p>Svelte and Rust. Must overlap with CET business hours.",
+      "expect": "remote",
+      "note": "timezone-restricted remote"
+    },
+    {
+      "id": "neg-01",
+      "header": "Ironwood Systems | Embedded Engineer | Austin, TX",
+      "text": "Ironwood Systems | Embedded Engineer | Austin, TX<p>Sorry, this is not a remote position. You will be hands-on with boards daily.",
+      "expect": "onsite",
+      "note": "the word 'remote' appears but is negated — naive matching fails this"
+    },
+    {
+      "id": "neg-02",
+      "header": "Halyard Capital | Quant Developer | New York",
+      "text": "Halyard Capital | Quant Developer | New York<p>No remote work. We are in the office five days a week and that is not changing.",
+      "expect": "onsite"
+    },
+    {
+      "id": "neg-03",
+      "header": "Pinegrove | Platform Engineer | Denver, CO | Remote: No",
+      "text": "Pinegrove | Platform Engineer | Denver, CO | Remote: No<p>Kubernetes, Terraform, Go.",
+      "expect": "onsite",
+      "note": "field-style negation"
+    },
+    {
+      "id": "neg-04",
+      "header": "Stonelight Studios | Gameplay Programmer | Vancouver | Onsite only",
+      "text": "Stonelight Studios | Gameplay Programmer | Vancouver | Onsite only<p>C++ and Unreal. Local candidates only please.",
+      "expect": "onsite"
+    },
+    {
+      "id": "neg-05",
+      "header": "Delta Foundry | Manufacturing Software Lead | Detroit",
+      "text": "Delta Foundry | Manufacturing Software Lead | Detroit<p>Candidates must be willing to relocate. We cover moving costs.",
+      "expect": "onsite"
+    },
+    {
+      "id": "neg-06",
+      "header": "Cobalt Trading | Systems Engineer | Chicago, IL",
+      "text": "Cobalt Trading | Systems Engineer | Chicago, IL<p>Low-latency C++ on custom hardware. In-office only, 5 days a week in the office.",
+      "expect": "onsite"
+    },
+    {
+      "id": "neg-07",
+      "header": "Northbay Clinic Software | Integration Engineer | Oakland",
+      "text": "Northbay Clinic Software | Integration Engineer | Oakland<p>You must be able to work from our office. No WFH for this role due to PHI handling.",
+      "expect": "onsite"
+    },
+    {
+      "id": "hyb-01",
+      "header": "Tessellate | Product Engineer | Seattle, WA",
+      "text": "Tessellate | Product Engineer | Seattle, WA<p>We are hybrid — 3 days in the office, 2 wherever you like.",
+      "expect": "hybrid"
+    },
+    {
+      "id": "hyb-02",
+      "header": "Kestrel Labs | ML Engineer | London",
+      "text": "Kestrel Labs | ML Engineer | London<p>Remote-friendly, though we do like people to come in when they can. PyTorch, LLM evaluation work.",
+      "expect": "hybrid",
+      "note": "'remote-friendly' is a weasel word — usually means hybrid"
+    },
+    {
+      "id": "hyb-03",
+      "header": "Auburn Analytics | Data Scientist | Atlanta, GA",
+      "text": "Auburn Analytics | Data Scientist | Atlanta, GA<p>Two days a week in office, rest remote. Python, dbt, Postgres.",
+      "expect": "hybrid",
+      "note": "contains 'remote' but the arrangement is split"
+    },
+    {
+      "id": "hyb-04",
+      "header": "Quill & Co | Senior Designer | Brooklyn",
+      "text": "Quill &amp; Co | Senior Designer | Brooklyn<p>Mostly remote, but we get together in the studio on Mondays.",
+      "expect": "hybrid"
+    },
+    {
+      "id": "hyb-05",
+      "header": "Argos Freight | Backend Engineer | Rotterdam",
+      "text": "Argos Freight | Backend Engineer | Rotterdam<p>Partially remote. Elixir and Phoenix, moving off a Rails monolith.",
+      "expect": "hybrid"
+    },
+    {
+      "id": "hyb-06",
+      "header": "Fieldstone | Infrastructure Engineer | Austin, TX | Hybrid (2 days onsite)",
+      "text": "Fieldstone | Infrastructure Engineer | Austin, TX | Hybrid (2 days onsite)<p>Terraform, AWS, Kubernetes.",
+      "expect": "hybrid"
+    },
+    {
+      "id": "hyb-07",
+      "header": "Marlowe Interactive | Tools Engineer | Montreal",
+      "text": "Marlowe Interactive | Tools Engineer | Montreal<p>We are office-first but flexible. C# and .NET.",
+      "expect": "hybrid"
+    },
+    {
+      "id": "hyb-08",
+      "header": "Vantage Grid | Simulation Engineer | Munich",
+      "text": "Vantage Grid | Simulation Engineer | Munich<p>Remote with occasional onsite visits for hardware integration weeks.",
+      "expect": "hybrid",
+      "note": "'remote with...office' construction"
+    },
+    {
+      "id": "rem-01",
+      "header": "Wavelength | Staff Engineer | Remote",
+      "text": "Wavelength | Staff Engineer | Remote<p>We are 100% remote and have been since 2019. Rust, Postgres, some TypeScript.",
+      "expect": "remote"
+    },
+    {
+      "id": "rem-02",
+      "header": "Tidepool Software | Senior Developer | Anywhere",
+      "text": "Tidepool Software | Senior Developer | Anywhere<p>Work from anywhere in the world. We are a fully distributed team across 14 countries.",
+      "expect": "remote"
+    },
+    {
+      "id": "rem-03",
+      "header": "Ledgerline | Backend Engineer | Remote: Yes | $130k-$165k",
+      "text": "Ledgerline | Backend Engineer | Remote: Yes | $130k-$165k<p>Django and Postgres. Async-first culture.",
+      "expect": "remote"
+    },
+    {
+      "id": "rem-04",
+      "header": "Prism Security | Security Engineer | Remote-first",
+      "text": "Prism Security | Security Engineer | Remote-first<p>We hunt for remote code execution bugs in customer infrastructure. Go and Python.",
+      "expect": "remote",
+      "note": "genuinely remote AND contains 'remote code execution' — both signals present"
+    },
+    {
+      "id": "rem-05",
+      "header": "Foxglove Analytics | Full-Stack Engineer | Remote (US only)",
+      "text": "Foxglove Analytics | Full-Stack Engineer | Remote (US only)<p>Next.js, GraphQL, Postgres. US work authorization required.",
+      "expect": "remote"
+    },
+    {
+      "id": "rem-06",
+      "header": "Basalt | DevOps Engineer | Fully Remote | EUR 70k-90k",
+      "text": "Basalt | DevOps Engineer | Fully Remote | EUR 70k-90k<p>Must be located in Europe, within 2 hours of CET.",
+      "expect": "remote"
+    },
+    {
+      "id": "rem-07",
+      "header": "Runcible | Senior Rails Developer | Telecommute",
+      "text": "Runcible | Senior Rails Developer | Telecommute<p>We have been a telecommuting shop for a decade. Ruby, Rails, Redis.",
+      "expect": "remote",
+      "note": "older vocabulary for the same thing"
+    },
+    {
+      "id": "rem-08",
+      "header": "Applejack Systems | Support Engineer | WFH",
+      "text": "Applejack Systems | Support Engineer | WFH<p>Full work from home. You will need a decent internet connection and a quiet space.",
+      "expect": "remote"
+    },
+    {
+      "id": "jrg-01",
+      "header": "Beacon Infra | Site Reliability Engineer | Palo Alto, CA",
+      "text": "Beacon Infra | Site Reliability Engineer | Palo Alto, CA<p>You will manage remote servers across three regions and debug remote hosts under load. Kubernetes and Go.",
+      "expect": "onsite",
+      "note": "'remote' twice, both as jargon — the masking rule earns its keep here"
+    },
+    {
+      "id": "jrg-02",
+      "header": "Sentry Point | Firmware Engineer | San Jose, CA",
+      "text": "Sentry Point | Firmware Engineer | San Jose, CA<p>Our product does remote attestation and remote telemetry for industrial devices. C and Rust.",
+      "expect": "onsite",
+      "note": "domain vocabulary, not a work arrangement"
+    },
+    {
+      "id": "jrg-03",
+      "header": "Helios Desktop | Platform Engineer | Tel Aviv",
+      "text": "Helios Desktop | Platform Engineer | Tel Aviv<p>We build remote desktop software. Low-level graphics work in C++.",
+      "expect": "onsite"
+    },
+    {
+      "id": "cfl-01",
+      "header": "Ardent Bio | Bioinformatics Engineer | Cambridge, MA | REMOTE",
+      "text": "Ardent Bio | Bioinformatics Engineer | Cambridge, MA | REMOTE<p>Correction from last month: this role is not remote after all, we need you in the wet lab.",
+      "expect": "onsite",
+      "note": "header says remote, body retracts it — body negation should win"
+    },
+    {
+      "id": "cfl-02",
+      "header": "Junction Data | Analytics Engineer | REMOTE",
+      "text": "Junction Data | Analytics Engineer | REMOTE<p>Mostly remote, though we ask for two days in the office each week during onboarding.",
+      "expect": "hybrid",
+      "note": "header oversells; body reveals hybrid"
+    },
+    {
+      "id": "cfl-03",
+      "header": "Copperline | Senior Engineer | NYC or Remote",
+      "text": "Copperline | Senior Engineer | NYC or Remote<p>You can work fully remote or from our Manhattan office, your choice. TypeScript and Go.",
+      "expect": "remote",
+      "note": "office exists but remote is genuinely available"
+    },
+    {
+      "id": "sil-01",
+      "header": "Grantwood Press | Software Engineer | Portland, OR",
+      "text": "Grantwood Press | Software Engineer | Portland, OR<p>We publish academic journals and need help modernising our PHP stack. Laravel, MySQL.",
+      "expect": "onsite",
+      "note": "no work-arrangement language at all — absence should default to onsite, low confidence"
+    },
+    {
+      "id": "sil-02",
+      "header": "Bellweather Retail | Mobile Engineer | Toronto",
+      "text": "Bellweather Retail | Mobile Engineer | Toronto<p>Swift and Kotlin. Great benefits, four weeks vacation.",
+      "expect": "onsite"
+    },
+    {
+      "id": "geo-01",
+      "header": "Solstice AI | Research Engineer | Remote | Must be located in Canada",
+      "text": "Solstice AI | Research Engineer | Remote | Must be located in Canada<p>PyTorch and JAX. $160k-$200k CAD.",
+      "expect": "remote"
+    },
+    {
+      "id": "geo-02",
+      "header": "Tallgrass | Backend Engineer | Remote, EU only",
+      "text": "Tallgrass | Backend Engineer | Remote, EU only<p>Python and FastAPI. We need overlap with Berlin hours.",
+      "expect": "remote"
+    },
+    {
+      "id": "geo-03",
+      "header": "Harborview | Staff Engineer | Remote within 3 hours of UTC",
+      "text": "Harborview | Staff Engineer | Remote within 3 hours of UTC<p>Elixir, Postgres, some Rust.",
+      "expect": "remote"
+    },
+    {
+      "id": "msg-01",
+      "header": "Rooktown",
+      "text": "Rooktown<p>We are a small team building scheduling software for clinics. Looking for a senior full-stack developer. We are fully remote and always have been. Stack is Rails and React. Salary $130k-$160k depending on experience. Reach out at hiring@rooktown.example",
+      "expect": "remote",
+      "note": "no pipe convention at all — prose only"
+    },
+    {
+      "id": "msg-02",
+      "header": "Hey HN, Windmill here.",
+      "text": "Hey HN, Windmill here.<p>We make inventory software for small manufacturers. We have an office in Sheffield and everyone comes in. Not looking for remote at this time. Java and Postgres, $80k-$100k GBP equivalent.",
+      "expect": "onsite",
+      "note": "prose with negation buried mid-paragraph"
+    },
+    {
+      "id": "msg-03",
+      "header": "Peregrine Systems is hiring",
+      "text": "Peregrine Systems is hiring<p>Senior Platform Engineer. We are distributed across the US and Europe with no headquarters. Kubernetes, Terraform, Go. Comp is $145k-$185k.",
+      "expect": "remote",
+      "note": "'distributed' without the word 'remote'"
+    },
+    {
+      "id": "msg-04",
+      "header": "Aldergate | Multiple roles",
+      "text": "Aldergate | Multiple roles<p>Frontend Engineer, Backend Engineer, and a Product Designer. Hybrid setup, we are in the office Tuesday through Thursday. React, Node.js, PostgreSQL. London Bridge.",
+      "expect": "hybrid"
+    },
+    {
+      "id": "edge-01",
+      "header": "Thornbury | QA Engineer | Remote-friendly | Bristol, UK",
+      "text": "Thornbury | QA Engineer | Remote-friendly | Bristol, UK<p>Playwright and TypeScript. Come in when you want.",
+      "expect": "hybrid",
+      "note": "'remote-friendly' in the header field, not a clean REMOTE token"
+    },
+    {
+      "id": "edge-02",
+      "header": "Sable Networks | Network Engineer | Ashburn, VA",
+      "text": "Sable Networks | Network Engineer | Ashburn, VA<p>You will be in the datacenter. This is not a remote job, we need hands on equipment.",
+      "expect": "onsite"
+    },
+    {
+      "id": "edge-03",
+      "header": "Nimbus Forge | Founding Engineer | SF or Remote",
+      "text": "Nimbus Forge | Founding Engineer | SF or Remote<p>Preference for SF but open to fully remote for the right person. Rust and TypeScript.",
+      "expect": "remote"
+    },
+    {
+      "id": "edge-04",
+      "header": "Crown Ledger | Accountant-turned-Engineer | Remote (APAC)",
+      "text": "Crown Ledger | Accountant-turned-Engineer | Remote (APAC)<p>Unusual role. Python, Django. Must be based in Australia, New Zealand, or Singapore.",
+      "expect": "remote"
+    },
+    {
+      "id": "edge-05",
+      "header": "Blackthorn | Senior SRE | Hybrid or Remote",
+      "text": "Blackthorn | Senior SRE | Hybrid or Remote<p>Fully remote is fine. Hybrid available if you are near Dublin. AWS, Kubernetes, Go.",
+      "expect": "remote",
+      "note": "both words present, remote is genuinely offered — a known hard case"
+    }
+  ]
+}

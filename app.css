@@ -1,0 +1,336 @@
+/* Colour carries meaning here: every classification has one hue and it is used
+   for nothing else. Teal = remote, bronze = hybrid, slate = onsite. */
+
+:root {
+  --page:    #e9ecf0;
+  --surface: #ffffff;
+  --ink:     #141820;
+  --muted:   #59616e;
+  --rule:    #ccd2da;
+
+  --remote:     #0a6a5c;
+  --remote-bg:  #e2f1ee;
+  --hybrid:     #8a5510;
+  --hybrid-bg:  #f6ece0;
+  --onsite:     #545c69;
+  --onsite-bg:  #e7e9ed;
+
+  --focus: #1b4dc1;
+
+  --sans: ui-sans-serif, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  max-width: 54rem;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+a { color: var(--focus); text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- masthead ---------- */
+
+.masthead { margin-bottom: 2rem; }
+
+/* The wordmark sits above the descriptive headline rather than replacing it:
+   "Offsite" alone tells a first-time visitor nothing. */
+.wordmark {
+  margin: 0 0 .15rem;
+  font-size: .95rem;
+  font-weight: 620;
+  letter-spacing: .02em;
+  color: var(--remote);
+}
+
+.masthead h1 {
+  margin: 0 0 .6rem;
+  font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.masthead .src {
+  font-weight: 420;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.lede {
+  margin: 0;
+  max-width: 46rem;
+  color: var(--muted);
+}
+
+/* ---------- controls ---------- */
+
+.controls {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1.1rem 1.2rem 1.2rem;
+  margin-bottom: 1.6rem;
+}
+
+.row-search {
+  display: flex;
+  gap: .7rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.field { display: block; }
+
+.field > span {
+  display: block;
+  font-size: .8rem;
+  color: var(--muted);
+  margin-bottom: .25rem;
+}
+
+.row-search .field { flex: 1 1 18rem; }
+
+input[type="search"], select {
+  width: 100%;
+  font: inherit;
+  padding: .5rem .6rem;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 0;
+}
+
+button {
+  font: inherit;
+  font-weight: 560;
+  padding: .55rem 1.1rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--surface);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+button:hover { background: #000; }
+
+.row-filters {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 1rem 0 0;
+  padding: .9rem 0 0;
+  display: flex;
+  gap: 1rem 1.4rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.row-filters legend {
+  padding: 0;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.check {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .6rem .3rem .45rem;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  font-size: .95rem;
+}
+
+.check:has(input:checked) { border-color: currentColor; font-weight: 560; }
+.c-remote:has(input:checked) { color: var(--remote); background: var(--remote-bg); }
+.c-hybrid:has(input:checked) { color: var(--hybrid); background: var(--hybrid-bg); }
+.c-onsite:has(input:checked) { color: var(--onsite); background: var(--onsite-bg); }
+
+.conf { min-width: 11rem; }
+
+/* ---------- notices ---------- */
+
+.notice {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--muted);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.notice p { margin: 0 0 .4rem; }
+.notice p:last-child { margin-bottom: 0; color: var(--muted); }
+.notice-error { border-left-color: #a3341f; }
+
+.summary {
+  margin: 0 0 1.4rem;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.summary p { margin: 0; }
+.summary strong { color: var(--ink); }
+
+/* ---------- results ---------- */
+
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.posting {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left-width: 4px;
+  padding: 1.05rem 1.15rem 1.15rem;
+}
+
+.s-remote { border-left-color: var(--remote); }
+.s-hybrid { border-left-color: var(--hybrid); }
+.s-onsite { border-left-color: var(--onsite); }
+
+.posting-head {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  flex-wrap: wrap;
+  margin-bottom: .55rem;
+}
+
+.posting-head h2 {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  flex: 1 1 auto;
+}
+
+.verdict {
+  font-size: .82rem;
+  font-weight: 600;
+  padding: .12rem .5rem;
+}
+
+.s-remote .verdict { color: var(--remote); background: var(--remote-bg); }
+.s-hybrid .verdict { color: var(--hybrid); background: var(--hybrid-bg); }
+.s-onsite .verdict { color: var(--onsite); background: var(--onsite-bg); }
+
+.conf-pct {
+  font-family: var(--mono);
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.facts {
+  margin: 0 0 .6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1.4rem;
+  font-size: .9rem;
+}
+
+.facts div { display: flex; margin-right: 1.4rem; }
+.facts dt { color: var(--muted); margin-right: .4rem; }
+.facts dd { margin: 0; font-weight: 540; }
+
+.tech {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin: 0 0 .7rem;
+  padding: 0;
+}
+
+.tech li {
+  margin-right: .3rem;
+  font-family: var(--mono);
+  font-size: .76rem;
+  padding: .1rem .4rem;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+.excerpt {
+  margin: 0 0 .7rem;
+  max-width: 68ch;
+  color: #2a3039;
+  font-size: .95rem;
+}
+
+/* Evidence: the whole point of the tool. Tier drives the emphasis —
+   a decisive phrase is marked more strongly than a passing mention. */
+mark.ev {
+  background: transparent;
+  color: inherit;
+  padding: 0 .05em;
+  border-bottom: 2px solid currentColor;
+}
+
+mark.ev-t0 { background: #fdf3d0; border-bottom-color: #9a7b12; }
+mark.ev-t1 { background: #fbe4de; border-bottom-color: #a3341f; }
+mark.ev-t2 { background: var(--hybrid-bg); border-bottom-color: var(--hybrid); }
+mark.ev-t3 { background: var(--remote-bg); border-bottom-color: var(--remote); }
+mark.ev-t4 { border-bottom: 1px dotted var(--muted); }
+
+.why {
+  border-top: 1px solid var(--rule);
+  padding-top: .6rem;
+  font-size: .88rem;
+}
+
+.why summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.why[open] summary { margin-bottom: .5rem; }
+
+.why ul { margin: 0; padding-left: 1.1rem; }
+.why li { margin-bottom: .2rem; color: var(--muted); }
+.why code { font-family: var(--mono); font-size: .84rem; color: var(--ink); }
+.why q { color: var(--ink); }
+
+.links {
+  margin: .7rem 0 0;
+  display: flex;
+  gap: 1rem;
+  font-size: .9rem;
+}
+
+footer {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+footer code { font-family: var(--mono); font-size: .82rem; }
+
+@media (max-width: 34rem) {
+  .row-search { flex-direction: column; align-items: stretch; }
+  button { width: 100%; }
+  .facts { flex-direction: column; gap: .1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
