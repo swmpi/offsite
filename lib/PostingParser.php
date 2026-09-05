@@ -198,11 +198,25 @@ final class PostingParser
     {
         if (preg_match('/href="([^"]+)"/i', $html, $m)) {
             $url = html_entity_decode($m[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            if (filter_var($url, FILTER_VALIDATE_URL)) {
+            if (filter_var($url, FILTER_VALIDATE_URL) && $this->isWebUrl($url)) {
                 return $url;
             }
         }
         return null;
+    }
+
+    /**
+     * The posting is a stranger's HTML, and this URL ends up in an href.
+     * FILTER_VALIDATE_URL is not a safety check — it accepts, among others,
+     * "javascript://%0aalert(1)", where the // opens a JS comment that the
+     * newline closes. Escaping does not help in an href, so the scheme itself
+     * has to be on an allowlist.
+     */
+    private function isWebUrl(string $url): bool
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        return is_string($scheme)
+            && in_array(strtolower($scheme), ['http', 'https'], true);
     }
 
     private function toText(string $html): string

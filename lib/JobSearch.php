@@ -29,6 +29,9 @@ require_once __DIR__ . '/RemoteClassifier.php';
  */
 final class JobSearch
 {
+    /** Beyond a handful, extra keywords cost CPU without refining a search. */
+    private const MAX_TERMS = 12;
+
     public function __construct(
         private HnClient $client,
         private PostingParser $parser,
@@ -53,7 +56,10 @@ final class JobSearch
             return ['results' => [], 'scanned' => 0, 'thread' => null, 'counts' => [], 'threads' => []];
         }
 
-        $thread   = $threads[min($threadIndex, count($threads) - 1)];
+        // Clamp both ends. min() alone caps the top but lets a negative index
+        // through, which selects a missing key and fails deep in the client.
+        $index    = max(0, min($threadIndex, count($threads) - 1));
+        $thread   = $threads[$index];
         $postings = $this->client->threadPostings($thread['id']);
 
         $out = $this->searchIn($postings, $keyword, $allowStatuses, $minConfidence, $limit);
@@ -136,7 +142,12 @@ final class JobSearch
             return [];
         }
         $parts = preg_split('/[\s,]+/', $q, -1, PREG_SPLIT_NO_EMPTY);
-        return array_values(array_filter($parts, fn($t) => mb_strlen($t) >= 2));
+        $terms = array_values(array_filter($parts, fn($t) => mb_strlen($t) >= 2));
+
+        // Every term costs four regex passes per posting, over a thread of
+        // several hundred. Left uncapped, one long query string is enough to
+        // burn a lot of CPU per request, so only the first few terms count.
+        return array_slice($terms, 0, self::MAX_TERMS);
     }
 
     /**

@@ -25,7 +25,7 @@ require_once __DIR__ . '/lib/RemoteClassifier.php';
 require_once __DIR__ . '/lib/JobSearch.php';
 
 $keyword    = trim((string) ($_GET['q'] ?? ''));
-$threadIdx  = (int) ($_GET['thread'] ?? 0);
+$threadIdx  = max(0, (int) ($_GET['thread'] ?? 0));
 $minConf    = (float) ($_GET['conf'] ?? 0.0);
 $demo       = isset($_GET['demo']);
 $statuses   = $_GET['status'] ?? [RemoteClassifier::REMOTE];
@@ -38,6 +38,18 @@ $statuses = array_values(array_intersect($statuses, [
 if ($statuses === []) {
     $statuses = [RemoteClassifier::REMOTE];
 }
+
+/*
+ * Sent before any output. The page loads one same-origin stylesheet and runs
+ * no script of its own, so it can afford to deny everything and name the two
+ * exceptions. That policy is also what contains an injected URL scheme if one
+ * ever reaches an href.
+ */
+header("Content-Security-Policy: default-src 'none'; style-src 'self'; "
+     . "img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: no-referrer');
+header('X-Frame-Options: DENY');
 
 $search = new JobSearch(
     new HnClient(__DIR__ . '/cache'),
@@ -61,13 +73,32 @@ if ($ran) {
             $outcome = $search->search($keyword, $statuses, $minConf, $threadIdx);
         }
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        // RuntimeException is what this app throws on purpose, and those
+        // messages are written for the reader. Anything else is a bug, and its
+        // message carries internals — a TypeError names the absolute path of
+        // the file that raised it. Log those; show the visitor nothing.
+        $error = $e instanceof RuntimeException
+            ? $e->getMessage()
+            : 'Something went wrong while reading the thread.';
+
+        if (!$e instanceof RuntimeException) {
+            error_log('offsite: ' . $e);
+        }
     }
 }
 
 /** Wrap each matched phrase so the reader can see what drove the verdict. */
 function highlight(string $text, array $evidence, int $maxLen = 420): string
 {
+    // The placeholder tokens below are built from \x02 and \x03. A posting is
+    // a stranger's text and may contain those bytes itself, which would let it
+    // collide with a token and claim a highlight the classifier never matched.
+    // Nothing legitimate needs them, so drop the C0 controls except tab and
+    // newline — nl2br still needs the newline.
+    // No /u here on purpose: these are ASCII bytes, and a unicode-mode match
+    // returns null on malformed input, which would fail open.
+    $text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $text) ?? $text;
+
     $short = mb_strlen($text) > $maxLen ? mb_substr($text, 0, $maxLen) . '…' : $text;
     $html  = htmlspecialchars($short, ENT_QUOTES, 'UTF-8');
 
