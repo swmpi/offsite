@@ -160,7 +160,7 @@ $statusLabel = [
 
 <header class="masthead">
   <p class="wordmark">Offsite</p>
-  <h1>Remote roles in the <span class="src">Hacker News hiring threads</span></h1>
+  <h1>Remote roles in the <span class="src"><span class="nb">Hacker News</span> hiring threads</span></h1>
   <p class="lede">
   <a href="https://news.ycombinator.com/submitted?id=whoishiring">
     Hacker News posts hiring threads every month.</a> Nobody agrees on a format, and
