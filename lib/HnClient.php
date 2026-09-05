@@ -32,7 +32,10 @@ declare(strict_types=1);
  */
 final class HnClient
 {
-    private const SEARCH = 'https://hn.algolia.com/api/v1/search';
+    // search_by_date, not search: the plain endpoint orders by relevance,
+    // which returned a 2020 thread first and made the whole app serve
+    // six-year-old postings. Date order is what "recent" here means.
+    private const SEARCH = 'https://hn.algolia.com/api/v1/search_by_date';
     private const ITEM   = 'https://hn.algolia.com/api/v1/items/';
 
     public function __construct(

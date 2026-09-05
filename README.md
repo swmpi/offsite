@@ -1,6 +1,6 @@
 # Offsite
 
-**Remote roles in the Hacker News "Who is Hiring" threads.**
+**Remote roles in the [Hacker News](https://news.ycombinator.com/) "Who is Hiring" threads.**
 
 A search tool over Hacker News monthly hiring threads that filters by work
 arrangement — remote, hybrid, or onsite — and shows you the exact words it used

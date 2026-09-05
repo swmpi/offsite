@@ -79,6 +79,9 @@ a:hover { text-decoration-thickness: 2px; }
   font-weight: 420;
   font-style: italic;
   color: var(--muted);
+  /* Keep the source name whole: without this the headline breaks between
+     "Hacker" and "News" on a narrow screen. */
+  white-space: nowrap;
 }
 
 .lede {

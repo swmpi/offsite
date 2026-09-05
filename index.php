@@ -152,17 +152,19 @@ $statusLabel = [
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Offsite — remote roles in Who is Hiring</title>
+<title>Offsite - Remote Roles from Hacker News</title>
+<link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
 
 <header class="masthead">
   <p class="wordmark">Offsite</p>
-  <h1>Remote roles in <span class="src">Who is Hiring</span></h1>
+  <h1>Remote roles in the <span class="src">Hacker News hiring threads</span></h1>
   <p class="lede">
-    Hacker News posts hiring threads every month. Nobody agrees on a format, and
-    the word “remote” shows up in postings that aren’t remote at all. This reads
+  <a href="https://news.ycombinator.com/submitted?id=whoishiring">
+    Hacker News posts hiring threads every month.</a> Nobody agrees on a format, and
+    the word “remote” shows up in postings that aren’t remote at all. This web app reads
     each posting, decides between remote, hybrid and onsite, and shows you the
     exact words it based that on.
   </p>
@@ -318,12 +320,14 @@ $statusLabel = [
 <?php endif; ?>
 
 <footer>
-  <p>Postings come from the Hacker News Algolia API and belong to the people who
-     wrote them. Classification is done locally with pattern rules — no model,
-     no API key. Accuracy is measured by <code>eval/run.php</code>.</p>
+  <p>Postings come from the 
+    <a href="https://hn.algolia.com/api">
+     Hacker News Algolia API</a> and belong to the people who
+     posted them. Classification is done locally with pattern rules.
   <p>Offsite is free software under the
      <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU GPL v3</a>,
-     and comes with no warranty. <a href="LICENSE">Read the license.</a></p>
+     and comes with no warranty. <a href="LICENSE">Read the license.</a>
+     <a href="https://github.com/swmpi/offsite">Source on GitHub.</a></p>
 </footer>
 
 </body>
