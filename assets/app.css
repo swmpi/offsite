@@ -2,26 +2,37 @@
    for nothing else. Teal = remote, bronze = hybrid, slate = onsite. */
 
 :root {
-  --page:    #e9ecf0;
-  --surface: #ffffff;
-  --ink:     #141820;
-  --muted:   #59616e;
-  --rule:    #ccd2da;
+  --page:    #0b0e15;
+  --surface: #131824;
+  --ink:     #e6eaf2;
+  --muted:   #8d96a8;
+  --rule:    #263043;
+  /* Decorative separators can stay quiet; the outline of anything you can
+     click or type into has to clear 3:1 against the card behind it. */
+  --control-rule: #5d6b8c;
 
-  --remote:     #0a6a5c;
-  --remote-bg:  #e2f1ee;
-  --hybrid:     #8a5510;
-  --hybrid-bg:  #f6ece0;
-  --onsite:     #545c69;
-  --onsite-bg:  #e7e9ed;
+  --remote:     #3fd8b6;
+  --remote-bg:  #0f302b;
+  --hybrid:     #e2a84c;
+  --hybrid-bg:  #352713;
+  --onsite:     #9aa4b6;
+  --onsite-bg:  #222a38;
 
-  --focus: #1b4dc1;
+  --focus: #6f9dff;
 
   --sans: ui-sans-serif, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
+
+/* Tells the browser to render native widgets — select menus, checkboxes,
+   scrollbars, form autofill — against a dark ground. */
+html {
+  color-scheme: dark;
+  background: var(--page);
+  accent-color: var(--remote);
+}
 
 body {
   margin: 0 auto;
@@ -107,11 +118,13 @@ input[type="search"], select {
   width: 100%;
   font: inherit;
   padding: .5rem .6rem;
-  border: 1px solid var(--rule);
-  background: var(--surface);
+  border: 1px solid var(--control-rule);
+  background: var(--page);
   color: var(--ink);
   border-radius: 0;
 }
+
+input[type="search"]::placeholder { color: var(--muted); }
 
 button {
   font: inherit;
@@ -119,12 +132,12 @@ button {
   padding: .55rem 1.1rem;
   border: 1px solid var(--ink);
   background: var(--ink);
-  color: var(--surface);
+  color: var(--page);
   cursor: pointer;
   border-radius: 0;
 }
 
-button:hover { background: #000; }
+button:hover { background: #ffffff; border-color: #ffffff; }
 
 .row-filters {
   border: 0;
@@ -149,12 +162,13 @@ button:hover { background: #000; }
   align-items: center;
   gap: .4rem;
   padding: .3rem .6rem .3rem .45rem;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--control-rule);
   cursor: pointer;
   font-size: .95rem;
 }
 
 .check:has(input:checked) { border-color: currentColor; font-weight: 560; }
+.check:hover { border-color: var(--ink); }
 .c-remote:has(input:checked) { color: var(--remote); background: var(--remote-bg); }
 .c-hybrid:has(input:checked) { color: var(--hybrid); background: var(--hybrid-bg); }
 .c-onsite:has(input:checked) { color: var(--onsite); background: var(--onsite-bg); }
@@ -173,7 +187,7 @@ button:hover { background: #000; }
 
 .notice p { margin: 0 0 .4rem; }
 .notice p:last-child { margin-bottom: 0; color: var(--muted); }
-.notice-error { border-left-color: #a3341f; }
+.notice-error { border-left-color: #f2705a; }
 
 .summary {
   margin: 0 0 1.4rem;
@@ -271,7 +285,7 @@ button:hover { background: #000; }
 .excerpt {
   margin: 0 0 .7rem;
   max-width: 68ch;
-  color: #2a3039;
+  color: #c3cbdb;
   font-size: .95rem;
 }
 
@@ -284,8 +298,8 @@ mark.ev {
   border-bottom: 2px solid currentColor;
 }
 
-mark.ev-t0 { background: #fdf3d0; border-bottom-color: #9a7b12; }
-mark.ev-t1 { background: #fbe4de; border-bottom-color: #a3341f; }
+mark.ev-t0 { background: #3a3413; border-bottom-color: #e0c150; }
+mark.ev-t1 { background: #3d1f1b; border-bottom-color: #f2705a; }
 mark.ev-t2 { background: var(--hybrid-bg); border-bottom-color: var(--hybrid); }
 mark.ev-t3 { background: var(--remote-bg); border-bottom-color: var(--remote); }
 mark.ev-t4 { border-bottom: 1px dotted var(--muted); }
@@ -327,6 +341,10 @@ footer code { font-family: var(--mono); font-size: .82rem; }
 
 @media (max-width: 34rem) {
   .row-search { flex-direction: column; align-items: stretch; }
+  /* The 18rem basis above is a minimum *width* for the keyword field while the
+     row is horizontal. Stacked, the main axis is vertical and that same basis
+     would stretch the field to 18rem tall, so it has to be dropped here. */
+  .row-search .field { flex: 0 0 auto; }
   button { width: 100%; }
   .facts { flex-direction: column; gap: .1rem; }
 }
